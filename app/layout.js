@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { CocktailProvider } from "./context/Context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +12,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+      <CocktailProvider>
+        <body className={inter.className}>{children}</body>
+      </CocktailProvider>
+    </html >
   );
 }
