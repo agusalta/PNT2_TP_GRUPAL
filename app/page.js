@@ -2,10 +2,15 @@ import PageCocktails from "./cocktails/page";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-white text-black">
-      <h1 className="text-6xl p-2">PROYECTO PNT2</h1>
-      <p className="text-3xl  p-2">API ELEGIDA: Cocktails db</p>
-      <PageCocktails />
-    </main>
+    <div className="flex flex-col min-h-screen">
+      <header className="sticky top-0 z-50 bg-customWhite p-4 text-black text-center font-bold text-5xl italic">
+        COCKTAILS
+      </header>
+      <main className="flex-1 flex flex-col items-center justify-center p-4 bg-customWhite text-black">
+        <div className="w-full">
+          <PageCocktails />
+        </div>
+      </main>
+    </div>
   );
 }

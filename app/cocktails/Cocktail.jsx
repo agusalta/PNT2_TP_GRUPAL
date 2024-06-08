@@ -2,22 +2,22 @@ import Image from "next/image";
 import React from "react";
 
 function Cocktail(props) {
-  const { name, inst, thumb, ingredients, glass, category, alc } = props;
+  const { name, thumb } = props;
 
   return (
-    <div>
-      <h2>{name}</h2>
-      <Image width="300" height="300" src={thumb} alt={name} />
-      <p>{inst}</p>
-      <h3>Ingredients:</h3>
-      <ul>
-        {ingredients.map((ingredient, index) => (
-          <li key={index}>{ingredient}</li>
-        ))}
-      </ul>
-      <p>Glass: {glass}</p>
-      <p>Category: {category}</p>
-      <p>Alcoholic: {alc}</p>
+    <div className="p-3 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+      <h2 className="uppercase font-bold text-center text-xl mb-2">{name}</h2>
+      <div className="flex justify-center mb-4">
+        <Image
+          width="500"
+          height="500"
+          src={thumb}
+          alt={name}
+          className="rounded-lg"
+          blurDataURL={thumb}
+          placeholder="blur"
+        />
+      </div>
     </div>
   );
 }

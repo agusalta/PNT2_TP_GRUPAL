@@ -5,7 +5,7 @@ function CocktailList(props) {
   const { Cocktails } = props;
 
   return (
-    <div>
+    <div className="grid sm:grid-cols-1 sm:w-full md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {Cocktails &&
         Cocktails.drinks &&
         Cocktails.drinks.map(cocktail => {
@@ -25,7 +25,7 @@ function CocktailList(props) {
               inst={cocktail.strInstructionsES}
               thumb={cocktail.strDrinkThumb}
               ingredients={ingredients}
-              glass={cocktail.srtGlass}
+              glass={cocktail.strGlass}
               category={cocktail.strCategory}
               alc={cocktail.strAlcoholic}
             />
