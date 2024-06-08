@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 export const CocktailContext = createContext();
 
@@ -11,11 +11,6 @@ export function CocktailProvider({ children }) {
       const response = await fetch(
         `http://localhost:3000/cocktails/letter/${letter}`
       );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
       const data = await response.json();
       setCocktailsByFirstLetter(data);
       return data;
@@ -26,9 +21,46 @@ export function CocktailProvider({ children }) {
     }
   };
 
+  const handleCocktailByCategory = async category => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/cocktails/category/search/${category}`
+      );
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      throw error;
+    }
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/cocktails/cocktail/categories"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      setError(error.message);
+      throw error;
+    }
+  };
+
   return (
     <CocktailContext.Provider
-      value={{ handleCocktailByFirstLetter, cocktailsByFirstLetter }}
+      value={{
+        handleCocktailByFirstLetter,
+        cocktailsByFirstLetter,
+        getCategories,
+        handleCocktailByCategory,
+      }}
     >
       {children}
     </CocktailContext.Provider>
