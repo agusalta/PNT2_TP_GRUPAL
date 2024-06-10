@@ -16,7 +16,6 @@ export function CocktailProvider({ children }) {
       return data;
     } catch (error) {
       console.log("Fetch error: ", error.message);
-      setError(error.message);
       throw error;
     }
   };
@@ -40,6 +39,7 @@ export function CocktailProvider({ children }) {
       const response = await fetch(
         "http://localhost:3000/cocktails/cocktail/categories"
       );
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -48,7 +48,20 @@ export function CocktailProvider({ children }) {
       return data;
     } catch (error) {
       console.log("Fetch error: ", error.message);
-      setError(error.message);
+      throw error;
+    }
+  };
+
+  const handleCocktailByName = async name => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/cocktails/${name}`
+      );
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
       throw error;
     }
   };
@@ -60,6 +73,7 @@ export function CocktailProvider({ children }) {
         cocktailsByFirstLetter,
         getCategories,
         handleCocktailByCategory,
+        handleCocktailByName,
       }}
     >
       {children}
