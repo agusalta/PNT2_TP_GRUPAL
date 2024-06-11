@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const CocktailContext = createContext();
 
@@ -54,9 +54,7 @@ export function CocktailProvider({ children }) {
 
   const handleCocktailByName = async name => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/cocktails/${name}`
-      );
+      const response = await fetch(`http://localhost:3000/cocktails/${name}`);
 
       const data = await response.json();
       return data;
