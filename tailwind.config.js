@@ -16,6 +16,7 @@ module.exports = {
         customDarkRed: '#6B0504',
         customOrange: '#A3320B',
         customGold: '#E6AF2E',
+        customRed: '#7c2828',
       },
     },
     plugins: [],
