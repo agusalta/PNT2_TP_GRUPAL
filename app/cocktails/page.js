@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
-import { CocktailContext } from '../context/Context';
+import { CocktailContext } from '../context/CocktailContext';
 
 export default function PageCocktails() {
   const [cocktails, setCocktails] = useState({});
@@ -28,7 +28,7 @@ export default function PageCocktails() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col lg:flex-row">
+    <div className="flex min-h-screen flex-col lg:flex-row w-full">
       <aside className="hidden lg:block w-full lg:w-1/4 bg-customRed text-black p-4 rounded-lg shadow-lg">
         <h2 className="text-3xl font-bold mb-4 text-center">Buscar por Categoría</h2>
         <ul className="space-y-2">

@@ -1,6 +1,6 @@
 "use client"
 import React, { useContext, useEffect, useState } from 'react';
-import { CocktailContext } from '../../context/Context';
+import { CocktailContext } from '../../context/CocktailContext';
 import Cocktail from '../Cocktail';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -59,9 +59,14 @@ export default function PageDetails({ params }) {
             ) : (
                 <p>Cargando...</p>
             )}
-            <Link href="/" className='uppercase p-2 mt-4 bg-black text-white rounded-md hover:bg-gray-700'>
-                Volver
-            </Link>
+            <div className=''>
+                <Link href="/" className='uppercase p-2 mt-4 bg-black text-white rounded-md hover:bg-gray-700'>
+                    Volver
+                </Link>
+                <button className='uppercase p-2 mt-4 bg-black text-white rounded-md hover:bg-gray-700'>
+                    Favorito
+                </button>
+            </div>
         </section>
     );
 }
