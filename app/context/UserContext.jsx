@@ -19,12 +19,12 @@ const getUserFromToken = token => {
 export function UserProvider({ children }) {
   const [login, setLogin] = useState(false);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("authToken"));
 
-  const handleRegister = async (email, password) => {
+  const handleRegister = async user => {
     try {
-      if (!email || !password) {
+      if (!user.email || !user.password) {
         throw new Error("Email y contraseña son obligatorios.");
+        return null;
       }
 
       const response = await fetch("http://localhost:3000/users/register", {
@@ -32,10 +32,7 @@ export function UserProvider({ children }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify(user),
       });
 
       if (!response.ok) {
@@ -82,7 +79,6 @@ export function UserProvider({ children }) {
 
       // Almacenar el token en localStorage
       localStorage.setItem("authToken", authToken);
-      setToken(authToken);
       setLogin(true);
 
       // Obtener y almacenar los datos del usuario desde el token
@@ -105,7 +101,7 @@ export function UserProvider({ children }) {
 
   return (
     <UserContext.Provider
-      value={{ handleRegister, handleLogin, handleLogout, login }}
+      value={{ handleRegister, handleLogin, handleLogout, login, user }}
     >
       {children}
     </UserContext.Provider>
