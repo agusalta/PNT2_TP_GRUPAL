@@ -1,11 +1,35 @@
+"use client";
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '@/app/context/UserContext';
 
 function SignInForm() {
+    const { handleLogin } = useContext(UserContext);
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await handleLogin(formData.email, formData.password);
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    };
+
     return (
         <section className="bg-customWhite">
             <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
-                <form className="w-full max-w-md">
+                <form className="w-full max-w-md" onSubmit={handleSubmit}>
                     <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl ">
                         Sign In
                     </h1>
@@ -19,6 +43,9 @@ function SignInForm() {
 
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                             placeholder="Email address"
                         />
@@ -33,6 +60,9 @@ function SignInForm() {
 
                         <input
                             type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
                             className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                             placeholder="Password"
                         />
@@ -45,9 +75,12 @@ function SignInForm() {
                             Sign in
                         </button>
 
-                        <div className="mt-6 text-center">
+                        <div className="flex items-center justify-around gap-2 mt-6 text-center">
                             <Link href={"/users/register"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
                                 Don’t have an account yet? Sign up
+                            </Link>
+                            <Link href={"/"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
+                                Go Back
                             </Link>
                         </div>
                     </div>
