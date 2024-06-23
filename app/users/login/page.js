@@ -92,7 +92,7 @@ function SignInForm() {
                             <Link href={"/users/register"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">
                                 Don’t have an account yet? Sign up
                             </Link>
-                            <Link href={"/"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
+                            <Link href={"/"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">
                                 Go Back
                             </Link>
                         </div>
