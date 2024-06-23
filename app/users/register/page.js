@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link';
 import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UserContext } from '@/app/context/UserContext';
 
 function SignUpForm() {
@@ -14,9 +15,11 @@ function SignUpForm() {
         profilePhoto: null,
     });
     const [errors, setErrors] = useState({});
+    const router = useRouter();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+        setFormData({ ...formData, [e.target.name]: value });
     };
 
     const validate = () => {
@@ -42,11 +45,12 @@ function SignUpForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validate()) {
-            try{
+            try {
                 await handleRegister(formData);
                 setSuccessMessage('Sign up successful!');
+                router.push('/');
             }
-            catch(error){
+            catch (error) {
                 seterrorMessage(error.message);
             }
             console.log("Form submitted", formData);
@@ -135,8 +139,8 @@ function SignUpForm() {
                     )}
                     {errorMessage && (
                         <div className="p-4 my-5 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
-                        {errorMessage}
-                    </div>
+                            {errorMessage}
+                        </div>
                     )}
 
                     <div className="mt-6">

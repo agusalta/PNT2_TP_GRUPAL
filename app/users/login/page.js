@@ -1,6 +1,7 @@
 "use client";
 import Link from 'next/link';
 import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UserContext } from '@/app/context/UserContext';
 
 function SignInForm() {
@@ -10,6 +11,7 @@ function SignInForm() {
         email: '',
         password: '',
     });
+    const router = useRouter();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,10 +20,14 @@ function SignInForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await handleLogin(formData.email, formData.password);
-            window.location.href = '/';
+            const res = await handleLogin(formData.email, formData.password);
+
+            if (res) {
+                router.push('/');
+            }
+
         } catch (error) {
-    seterrorMessage(error.message);
+            seterrorMessage(error.message);
 
             console.error('Error during login:', error);
         }
@@ -71,8 +77,8 @@ function SignInForm() {
 
                     {errorMessage && (
                         <div className="p-4 my-5 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
-                        {errorMessage}
-                    </div>
+                            {errorMessage}
+                        </div>
                     )}
 
                     <div className="mt-6">
