@@ -1,16 +1,17 @@
 "use client";
 import Link from 'next/link';
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { UserContext } from '@/app/context/UserContext';
 
 function SignInForm() {
     const { handleLogin } = useContext(UserContext);
-
+    const [errorMessage, seterrorMessage] = useState('');
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
+    const router = useRouter();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,9 +20,15 @@ function SignInForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await handleLogin(formData.email, formData.password);
-            window.location.href = '/';
+            const res = await handleLogin(formData.email, formData.password);
+
+            if (res) {
+                router.push('/');
+            }
+
         } catch (error) {
+            seterrorMessage(error.message);
+
             console.error('Error during login:', error);
         }
     };
@@ -67,6 +74,12 @@ function SignInForm() {
                             placeholder="Password"
                         />
                     </div>
+
+                    {errorMessage && (
+                        <div className="p-4 my-5 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <div className="mt-6">
                         <button

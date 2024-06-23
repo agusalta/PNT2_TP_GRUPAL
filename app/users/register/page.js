@@ -1,31 +1,66 @@
 "use client"
 import Link from 'next/link';
 import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { UserContext } from '@/app/context/UserContext';
 
 function SignUpForm() {
     const { handleRegister } = useContext(UserContext);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, seterrorMessage] = useState('');
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
         profilePhoto: null,
     });
+    const [errors, setErrors] = useState({});
+    const router = useRouter();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const value = e.target.type === 'file' ? e.target.files[0] : e.target.value;
+        setFormData({ ...formData, [e.target.name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const validate = () => {
+        const errors = {};
+
+        if (!formData.username || formData.username.length < 3) {
+            errors.username = "Username must be at least 3 characters long.";
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email || !emailPattern.test(formData.email)) {
+            errors.email = "Please enter a valid email address.";
+        }
+
+        if (!formData.password || formData.password.length < 6 || !/\d/.test(formData.password)) {
+            errors.password = "Password must be at least 6 characters long and include at least one number.";
+        }
+
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        handleRegister(formData);
+        if (validate()) {
+            try {
+                await handleRegister(formData);
+                setSuccessMessage('Sign up successful!');
+                router.push('/users/login');
+            }
+            catch (error) {
+                seterrorMessage(error.message);
+            }
+            console.log("Form submitted", formData);
+        }
     };
 
     return (
         <section className="bg-customWhite">
             <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
                 <form className="w-full max-w-md" onSubmit={handleSubmit}>
-
                     <div className="flex items-center justify-center mt-6">
                         <a href="#" className="w-1/3 pb-4 text-2xl text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400">
                             Sign Up
@@ -47,8 +82,8 @@ function SignUpForm() {
                             className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                             placeholder="Username"
                         />
-
                     </div>
+                    {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
 
                     <label htmlFor="dropzone-file" className="flex items-center px-3 py-3 mx-auto mt-6 text-center bg-white border-2 border-dashed rounded-lg cursor-pointer dark:border-gray-600 dark:bg-gray-900">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -69,7 +104,7 @@ function SignUpForm() {
                         </span>
 
                         <input
-                            type="email"
+                            type="text"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
@@ -77,6 +112,7 @@ function SignUpForm() {
                             placeholder="Email address"
                         />
                     </div>
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
                     <div className="relative flex items-center mt-4">
                         <span className="absolute">
@@ -94,6 +130,18 @@ function SignUpForm() {
                             onChange={handleChange}
                         />
                     </div>
+                    {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+
+                    {successMessage && (
+                        <div className="p-4 my-5 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800">
+                            {successMessage}
+                        </div>
+                    )}
+                    {errorMessage && (
+                        <div className="p-4 my-5 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <div className="mt-6">
                         <button

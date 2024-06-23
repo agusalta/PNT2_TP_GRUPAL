@@ -1,18 +1,28 @@
 "use client";
-import { createContext, useState } from "react";
-import jwt_decode from "jwt-decode";
-
+import { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
-const getUserFromToken = token => {
+const getUserFromEmail = async (token, email) => {
   try {
-    const decoded = jwtDecode(token);
-    return {
-      _id: decoded._id,
-      email: decoded.email,
-    };
+    if (!email) {
+      throw new Error("El email es un campo necesario.");
+    }
+
+    const response = await fetch(`http://localhost:3000/users/find/${email}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("No se pudo obtener la información del usuario.");
+    }
+
+    const userData = await response.json();
+    return userData;
   } catch (error) {
-    console.error("Error decoding token:", error.message);
+    console.error("Error al obtener datos del usuario:", error.message);
     return null;
   }
 };
@@ -82,16 +92,11 @@ export function UserProvider({ children }) {
       localStorage.setItem("authToken", authToken);
 
       // Obtener y almacenar los datos del usuario desde el token
-      const userData = getUserFromToken(authToken);
-
-      if (!userData) {
-        throw new Error(
-          "Error al decodificar el token o datos de usuario incorrectos."
-        );
-      }
-
+      const userData = await getUserFromEmail(authToken, email);
       setUser(userData);
       setLogin(true);
+
+      console.log(userData);
 
       return { message: "Usuario logeado exitosamente." };
     } catch (error) {
@@ -102,14 +107,57 @@ export function UserProvider({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setToken(null);
     setLogin(false);
     setUser(null);
   };
 
+  const handleFavouriteCocktail = async cocktail => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("No se pudo obtener el token de autenticación.");
+      }
+
+      if (!user || !user.email) {
+        throw new Error("El usuario o el email son invalidos.");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/users/${user.email}/favorites`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ strDrink: cocktail?.strDrink }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la información del usuario.");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      throw error;
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ handleRegister, handleLogin, handleLogout, login, user }}
+      value={{
+        handleRegister,
+        handleLogin,
+        handleLogout,
+        login,
+        user,
+        handleFavouriteCocktail,
+      }}
     >
       {children}
     </UserContext.Provider>
