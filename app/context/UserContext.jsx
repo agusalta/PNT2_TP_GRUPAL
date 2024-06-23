@@ -1,17 +1,28 @@
 "use client";
-import { createContext, useState } from "react";
-
+import { createContext, useState, useEffect } from "react";
 export const UserContext = createContext();
 
-const getUserFromToken = token => {
+const getUserFromEmail = async (token, email) => {
   try {
-    const decoded = jwtDecode(token);
-    return {
-      _id: decoded._id,
-      email: decoded.email,
-    };
+    if (!email) {
+      throw new Error("El email es un campo necesario.");
+    }
+
+    const response = await fetch(`http://localhost:3000/users/find/${email}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("No se pudo obtener la información del usuario.");
+    }
+
+    const userData = await response.json();
+    return userData;
   } catch (error) {
-    console.error("Error decoding token:", error.message);
+    console.error("Error al obtener datos del usuario:", error.message);
     return null;
   }
 };
@@ -24,7 +35,6 @@ export function UserProvider({ children }) {
     try {
       if (!user.email || !user.password) {
         throw new Error("Email y contraseña son obligatorios.");
-        return null;
       }
 
       const response = await fetch("http://localhost:3000/users/register", {
@@ -79,11 +89,13 @@ export function UserProvider({ children }) {
 
       // Almacenar el token en localStorage
       localStorage.setItem("authToken", authToken);
-      setLogin(true);
 
       // Obtener y almacenar los datos del usuario desde el token
-      const userData = getUserFromToken(authToken);
+      const userData = await getUserFromEmail(authToken, email);
       setUser(userData);
+      setLogin(true);
+
+      console.log(userData);
 
       return { message: "Usuario logeado exitosamente." };
     } catch (error) {
@@ -94,9 +106,9 @@ export function UserProvider({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    setToken(null);
     setLogin(false);
     setUser(null);
+    setToken(null);
   };
 
   return (
