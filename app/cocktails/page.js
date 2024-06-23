@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
-import { CocktailContext } from '../context/Context';
+import { CocktailContext } from '../context/CocktailContext';
 
 export default function PageCocktails() {
   const [cocktails, setCocktails] = useState({});
