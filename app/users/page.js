@@ -45,7 +45,7 @@ function UsersPage() {
                                 height={150}
                                 className="rounded-full"
                             />
-                            <span className="absolute bottom-0 right-0 bg-green-500 rounded-full p-2">
+                            <span className="absolute bottom-0 right-0 bg-customDarkRed rounded-full p-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 6a1 1 0 112 0v5a1 1 0 11-2 0V6zm1 1a1 0 00-1 1v3a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
