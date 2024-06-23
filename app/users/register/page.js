@@ -48,7 +48,7 @@ function SignUpForm() {
             try {
                 await handleRegister(formData);
                 setSuccessMessage('Sign up successful!');
-                router.push('/');
+                router.push('/users/login');
             }
             catch (error) {
                 seterrorMessage(error.message);
