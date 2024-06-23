@@ -62,7 +62,7 @@ function SignUpForm() {
             <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
                 <form className="w-full max-w-md" onSubmit={handleSubmit}>
                     <div className="flex items-center justify-center mt-6">
-                        <a href="#" className="w-1/3 pb-4 text-2xl text-center text-gray-800 capitalize border-b-2 border-blue-500 dark:border-blue-400">
+                        <a href="#" className="w-1/3 pb-4 text-2xl text-center text-customDarkRed capitalize border-b-2 border-customDarkRed dark:border-customDarkRed">
                             Sign Up
                         </a>
                     </div>
@@ -146,16 +146,16 @@ function SignUpForm() {
                     <div className="mt-6">
                         <button
                             type='submit'
-                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-customDarkRed rounded-lg hover:bg-black focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
                         >
                             Sign Up
                         </button>
 
                         <div className="flex items-center justify-around gap-2 mt-6 text-center">
-                            <Link href={"/users/login"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
+                            <Link href={"/users/login"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">
                                 Already have an account?
                             </Link>
-                            <Link href={"/"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
+                            <Link href={"/"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">
                                 Go Back
                             </Link>
                         </div>
