@@ -37,7 +37,7 @@ function SignInForm() {
         <section className="bg-customWhite">
             <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
                 <form className="w-full max-w-md" onSubmit={handleSubmit}>
-                    <h1 className="mt-3 text-2xl font-semibold text-customDarkRed capitalize sm:text-3xl ">
+                    <h1 className="mt-3 text-2xl font-semibold text-gray-800 capitalize sm:text-3xl ">
                         Sign In
                     </h1>
 
@@ -83,7 +83,7 @@ function SignInForm() {
 
                     <div className="mt-6">
                         <button
-                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-customDarkRed rounded-lg hover:bg-black focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-customDarkRed hover:bg-red-600 rounded-lg focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
                         >
                             Sign in
                         </button>
@@ -92,7 +92,7 @@ function SignInForm() {
                             <Link href={"/users/register"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">
                                 Don’t have an account yet? Sign up
                             </Link>
-                            <Link href={"/"} className="text-sm text-blue-500 hover:underline dark:text-customDarkRed">
+                            <Link href={"/"} className="text-sm text-blue-500 hover:underline dark:text-blue-400">
                                 Go Back
                             </Link>
                         </div>

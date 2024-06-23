@@ -146,7 +146,7 @@ function SignUpForm() {
                     <div className="mt-6">
                         <button
                             type='submit'
-                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-customDarkRed rounded-lg hover:bg-black focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+                            className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform rounded-lg bg-customDarkRed hover:bg-red-600  focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
                         >
                             Sign Up
                         </button>

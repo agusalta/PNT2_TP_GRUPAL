@@ -76,13 +76,13 @@ export default function PageDetails({ params }) {
                 )}
                 <div className='flex justify-center mt-6'>
                     <Link href="/" passHref>
-                        <button className='bg-black hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md mr-4'>
+                        <button className='bg-customDarkRed hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md mr-4'>
                             Volver
                         </button>
                     </Link>
 
                     {login &&
-                        <button className='bg-black hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md' onClick={handleClick}>
+                        <button className='bg-customDarkRed hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md' onClick={handleClick}>
                             Favorito
                         </button>}
 

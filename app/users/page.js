@@ -97,7 +97,7 @@ function UsersPage() {
                     </div>
                 </div>
                 <div className="mt-6 text-center">
-                    <Link href={"/"} className="text-blue-500 hover:underline">Volver</Link>
+                    <Link href={"/"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">Volver</Link>
                 </div>
             </div>
         </div>
