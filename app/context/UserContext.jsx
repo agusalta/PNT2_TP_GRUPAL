@@ -108,12 +108,55 @@ export function UserProvider({ children }) {
     localStorage.removeItem("authToken");
     setLogin(false);
     setUser(null);
-    setToken(null);
+  };
+
+  const handleFavouriteCocktail = async cocktail => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("No se pudo obtener el token de autenticación.");
+      }
+
+      if (!user || !user.email) {
+        throw new Error("El usuario o el email son invalidos.");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/users/${user.email}/favorites`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ strDrink: cocktail?.strDrink }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la información del usuario.");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      throw error;
+    }
   };
 
   return (
     <UserContext.Provider
-      value={{ handleRegister, handleLogin, handleLogout, login, user }}
+      value={{
+        handleRegister,
+        handleLogin,
+        handleLogout,
+        login,
+        user,
+        handleFavouriteCocktail,
+      }}
     >
       {children}
     </UserContext.Provider>

@@ -1,11 +1,36 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
+import { CocktailContext } from "../context/CocktailContext";
 
 function UsersPage() {
     const { user } = useContext(UserContext);
+    const { handleCocktailByName } = useContext(CocktailContext);
+    const [cocktails, setCocktails] = useState([]);
+
+    useEffect(() => {
+        const fetchCocktails = async () => {
+            if (user?.favoriteCocktails && user.favoriteCocktails.length > 0) {
+                try {
+                    const cocktailsPromises = user.favoriteCocktails.map(cocktail => handleCocktailByName(cocktail));
+                    const resolvedCocktails = await Promise.all(cocktailsPromises);
+
+                    const validCocktails = resolvedCocktails
+                        .filter(result => result.drinks != null)
+                        .flatMap(result => result.drinks);
+                    setCocktails(validCocktails);
+                } catch (error) {
+                    console.error("Error fetching cocktails:", error);
+                }
+            }
+        };
+
+        fetchCocktails();
+    }, [user?.favoriteCocktails, handleCocktailByName, user]);
+
+    console.log(cocktails);
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -22,7 +47,7 @@ function UsersPage() {
                             />
                             <span className="absolute bottom-0 right-0 bg-green-500 rounded-full p-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 6a1 1 0 112 0v5a1 1 0 11-2 0V6zm1 1a1 1 0 00-1 1v3a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 6a1 1 0 112 0v5a1 1 0 11-2 0V6zm1 1a1 0 00-1 1v3a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
                             </span>
                         </div>
@@ -48,6 +73,27 @@ function UsersPage() {
                                 <span className="text-gray-600">Usuario</span>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="mt-6">
+                        <h2 className="text-xl font-semibold mb-4">Cócteles favoritos</h2>
+                        {cocktails.length > 0 ? (
+                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {cocktails.map(cocktail => (
+                                    <li key={cocktail.idDrink} className="bg-gray-200 p-4 rounded-md">
+                                        <h3 className="text-lg font-semibold">{cocktail.strDrink}</h3>
+                                        <p className="text-gray-600">Categoría: {cocktail.strCategory}</p>
+                                        <p className="text-gray-600">Tipo: {cocktail.strAlcoholic}</p>
+                                        <p className="text-gray-600">Vaso: {cocktail.strGlass}</p>
+                                        <p className="text-gray-600">Instrucciones: {cocktail.strInstructions}</p>
+                                        <Image width={192} height={192} src={cocktail.strDrinkThumb} alt={cocktail.strDrink} className="w-full h-48 object-cover mt-4 rounded-md" />
+
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-600">No tienes cócteles favoritos.</p>
+                        )}
                     </div>
                 </div>
                 <div className="mt-6 text-center">
