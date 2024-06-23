@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 export const UserContext = createContext();
 
@@ -24,7 +25,6 @@ export function UserProvider({ children }) {
     try {
       if (!user.email || !user.password) {
         throw new Error("Email y contraseña son obligatorios.");
-        return null;
       }
 
       const response = await fetch("http://localhost:3000/users/register", {
@@ -76,14 +76,22 @@ export function UserProvider({ children }) {
 
       const data = await response.json();
       const authToken = data.token;
+      console.log("Token:", authToken);
 
       // Almacenar el token en localStorage
       localStorage.setItem("authToken", authToken);
-      setLogin(true);
 
       // Obtener y almacenar los datos del usuario desde el token
       const userData = getUserFromToken(authToken);
+
+      if (!userData) {
+        throw new Error(
+          "Error al decodificar el token o datos de usuario incorrectos."
+        );
+      }
+
       setUser(userData);
+      setLogin(true);
 
       return { message: "Usuario logeado exitosamente." };
     } catch (error) {
