@@ -18,6 +18,10 @@ export default function PageCocktails() {
     fetchCategories();
   }, [getCategories]);
 
+  useEffect(() => {
+    handleLetterClick('a');
+  }, []);
+
   const handleLetterClick = async (letter) => {
     const res = await handleCocktailByFirstLetter(letter);
     setCocktails(res);

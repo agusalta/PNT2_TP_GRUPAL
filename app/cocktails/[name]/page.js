@@ -30,27 +30,27 @@ export default function PageDetails({ params }) {
 
         fetchCocktail(name);
     }, [handleCocktailByName, name]);
-
+    
     const handleClick = () => {
         handleFavouriteCocktail(cocktail)
     }
 
     return (
-        <section className='bg-gray-100 min-h-screen flex items-center justify-center scale-125'>
+        <section className='bg-gray-100 min-h-screen flex items-center justify-center'>
             <div className='container mx-auto'>
                 {cocktail ? (
                     <div className='flex flex-col md:flex-row max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow-lg'>
-                        <div className='md:w-1/3'>
+                        <div className='mx-auto'>
                             <Image
                                 src={cocktail.strDrinkThumb}
                                 alt={cocktail.strDrink}
-                                width={500}
-                                height={500}
+                                width={450}
+                                height={450}
                                 className='object-cover'
                             />
                         </div>
                         <div className='p-4 md:w-2/3'>
-                            <h2 className='text-3xl text-right italic font-bold mb-2'>{cocktail.strDrink}</h2>
+                            <h2 className='text-3xl text-center italic font-bold mb-2'>{cocktail.strDrink}</h2>
                             <p className='mb-1'><strong>Categoría:</strong> {cocktail.strCategory}</p>
                             <p className='mb-1'><strong>Tipo de bebida:</strong> {cocktail.strAlcoholic}</p>
                             <p className='mb-1'><strong>Vaso recomendado:</strong> {cocktail.strGlass}</p>
