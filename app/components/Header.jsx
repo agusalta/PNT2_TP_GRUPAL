@@ -14,24 +14,34 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white p-4 text-gray-800 shadow-md">
       <div className="flex items-center justify-around gap-5">
-        <button className="text-lg font-bold hover:text-gray-600">HOME</button>
-        <h1 className="text-3xl font-bold">COCKTAILS</h1>
+        <Link href="/">
+          <Image
+            className="rounded-full cursor-pointer"
+            width={120}
+            height={120}
+            alt="Logo Sour"
+            src={"/Logo.png"}
+          />
+        </Link>
+        <h1 className="text-5xl font-extrabold uppercase italic text-center">
+          Sour.
+        </h1>
         {login ? (
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
             <Link href={"/users"}>
               {user && user.profilePhoto ? (
                 <Image
                   className="rounded-full cursor-pointer"
-                  width={60}
-                  height={60}
+                  width={40}
+                  height={40}
                   alt="profile picture"
                   src={user.profilePhoto}
                 />
               ) : (
                 <Image
                   className="rounded-full cursor-pointer"
-                  width={60}
-                  height={60}
+                  width={40}
+                  height={40}
                   alt="profile picture"
                   src="/profile.png"
                 />
@@ -45,9 +55,13 @@ function Header() {
             </button>
           </div>
         ) : (
-          <div className="flex gap-4">
-            <Link href={"/users/register"}>Sign Up</Link>
-            <Link href={"/users/login"}>Sign In</Link>
+          <div className="flex items-center gap-4">
+            <Link className="uppercase font-bold" href={"/users/register"}>
+              Sign Up
+            </Link>
+            <Link className="uppercase font-bold" href={"/users/login"}>
+              Sign In
+            </Link>
           </div>
         )}
       </div>
