@@ -10,7 +10,7 @@ export default function PageDetails({ params }) {
     const { handleCocktailByName } = useContext(CocktailContext);
     const { handleFavouriteCocktail, login } = useContext(UserContext);
     const [cocktail, setCocktail] = useState(null);
-    const [message, setMessage] = useState(null); 
+    const [message, setMessage] = useState(null);
 
     useEffect(() => {
         const fetchCocktail = async (n) => {
@@ -47,11 +47,11 @@ export default function PageDetails({ params }) {
     };
 
     return (
-        <section className='bg-gray-100 min-h-screen flex items-center justify-center scale-125'>
-            <div className='container mx-auto'>
+        <section className='bg-gray-100 min-h-screen flex items-center justify-center'>
+            <div className='container mx-auto px-4'>
                 {cocktail ? (
                     <div className='flex flex-col md:flex-row max-w-5xl mx-auto bg-white rounded-lg overflow-hidden shadow-lg'>
-                        <div className='md:w-1/3'>
+                        <div className='md:w-1/2'>
                             <Image
                                 src={cocktail.strDrinkThumb}
                                 alt={cocktail.strDrink}
@@ -60,8 +60,8 @@ export default function PageDetails({ params }) {
                                 className='object-cover'
                             />
                         </div>
-                        <div className='p-4 md:w-2/3'>
-                            <h2 className='text-3xl text-right italic font-bold mb-2'>{cocktail.strDrink}</h2>
+                        <div className='p-4 md:w-1/2'>
+                            <h2 className='text-3xl text-center md:text-right italic font-bold mb-2'>{cocktail.strDrink}</h2>
                             <p className='mb-1'><strong>Categoría:</strong> {cocktail.strCategory}</p>
                             <p className='mb-1'><strong>Tipo de bebida:</strong> {cocktail.strAlcoholic}</p>
                             <p className='mb-1'><strong>Vaso recomendado:</strong> {cocktail.strGlass}</p>
@@ -85,9 +85,9 @@ export default function PageDetails({ params }) {
                 ) : (
                     <p className='text-center'>Cargando...</p>
                 )}
-                <div className='flex justify-center mt-6'>
+                <div className='flex flex-col md:flex-row justify-center items-center mt-6'>
                     <Link href="/" passHref>
-                        <button className='bg-customDarkRed hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md mr-4'>
+                        <button className='bg-customDarkRed hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md mb-2 md:mb-0 md:mr-4'>
                             Volver
                         </button>
                     </Link>
@@ -96,10 +96,9 @@ export default function PageDetails({ params }) {
                         <button className='bg-customDarkRed hover:bg-red-600 transform ease-in delay-75 text-white px-6 py-2 rounded-md' onClick={handleClick}>
                             Favorito
                         </button>}
-
                 </div>
                 {message && (
-                    <div className="mt-4 p-3 text-black  rounded-md text-center">
+                    <div className="mt-4 p-3 text-black rounded-md text-center">
                         {message}
                     </div>
                 )}
