@@ -1,36 +1,80 @@
 "use client";
+import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import { CocktailContext } from "../context/CocktailContext";
 
 function UsersPage() {
-    const { user } = useContext(UserContext);
-    const { handleCocktailByName } = useContext(CocktailContext);
+    const { user, handleDeleteFavouriteCocktail, handleGetFavouriteCocktails } = useContext(UserContext);
     const [cocktails, setCocktails] = useState([]);
+    const [cocktailToDelete, setCocktailToDelete] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { handleCocktailByName } = useContext(CocktailContext);
+    const router = useRouter();
 
     useEffect(() => {
-        const fetchCocktails = async () => {
-            if (user?.favoriteCocktails && user.favoriteCocktails.length > 0) {
-                try {
-                    const cocktailsPromises = user.favoriteCocktails.map(cocktail => handleCocktailByName(cocktail));
-                    const resolvedCocktails = await Promise.all(cocktailsPromises);
+        const fetchData = async () => {
+            try {
+                const favouriteCocktails = await handleGetFavouriteCocktails();
 
-                    const validCocktails = resolvedCocktails
-                        .filter(result => result.drinks != null)
-                        .flatMap(result => result.drinks);
+                if (favouriteCocktails) {
+                    const cocktailsPromises = favouriteCocktails.map(cocktail => handleCocktailByName(cocktail));
+                    const cocktailsResults = await Promise.all(cocktailsPromises);
+
+                    const validCocktails = cocktailsResults
+                        .filter(result => result && result.drinks && result.drinks.length > 0)
+                        .map(result => result.drinks[0]);
+
                     setCocktails(validCocktails);
-                } catch (error) {
-                    console.error("Error fetching cocktails:", error);
                 }
+            } catch (error) {
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchCocktails();
-    }, [user?.favoriteCocktails, handleCocktailByName, user]);
+        fetchData();
+    }, [handleGetFavouriteCocktails, handleCocktailByName]);
 
-    console.log(cocktails);
+
+    useEffect(() => {
+        if (!user) {
+            router.push('/');
+        }
+    }, [user, router]);
+
+    const openModal = (cocktail) => {
+        setCocktailToDelete(cocktail);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setCocktailToDelete(null);
+    };
+
+    const handleDelete = async () => {
+        if (cocktailToDelete) {
+            try {
+                const deleted = await handleDeleteFavouriteCocktail(cocktailToDelete);
+                console.log(deleted)
+                console.log(cocktailToDelete)
+
+                if (deleted) {
+                    setCocktails(prevCocktails => prevCocktails.filter(cocktail => cocktail.idDrink !== cocktailToDelete.idDrink));
+                }
+
+                closeModal();
+            } catch (error) {
+                console.error("Error al eliminar cóctel favorito:", error);
+            }
+        }
+    };
+
+    const handleChange = (cocktail) => {
+        openModal(cocktail);
+    };
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -63,7 +107,17 @@ function UsersPage() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M12 6a2 2 0 100-4 2 2 0 000 4zM4 6a2 2 0 100-4 2 2 0 000 4zm0 7a2 2 0 100-4 2 2 0 000 4zm12 2a2 2 0 11-4 0 2 2 0 014 0zM8 15a2 2 0 100-4 2 2 0 000 4zm8-2a2 2 0 11-4 0 2 2 0 014 0zM8 3a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4zm0 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                                 </svg>
-                                <span className="text-gray-600">Miembro desde 2024</span>
+                                <p className="text-gray-600">
+                                    {user?.username || "El usuario "}
+                                    <span>
+                                        {cocktails?.length > 0
+                                            ? cocktails?.length === 1
+                                                ? "tiene una bebida favorita"
+                                                : `tiene ${cocktails?.length} bebidas favoritas`
+                                            : "no tiene bebidas favoritas"}
+                                    </span>
+                                </p>
+
                             </div>
                             <div className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -87,7 +141,44 @@ function UsersPage() {
                                         <p className="text-gray-600">Vaso: {cocktail.strGlass}</p>
                                         <p className="text-gray-600">Instrucciones: {cocktail.strInstructions}</p>
                                         <Image width={192} height={192} src={cocktail.strDrinkThumb} alt={cocktail.strDrink} className="w-full h-48 object-cover mt-4 rounded-md" />
+                                        <button className="p-3 hover:scale-110" onClick={() => handleChange(cocktail)}>Eliminar</button>
 
+                                        {isModalOpen && (
+                                            <div className="fixed z-10 inset-0 overflow-y-auto">
+                                                <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                                                    <div className="fixed inset-0 transition-opacity">
+                                                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                                                    </div>
+
+                                                    <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
+                                                    <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                                        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                                            <div className="sm:flex sm:items-start">
+                                                                <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                                    <svg className="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                                    </svg>
+                                                                </div>
+                                                                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                                                    <h3 className="text-lg leading-6 font-medium text-gray-900">Eliminar cóctel</h3>
+                                                                    <div className="mt-2">
+                                                                        <p className="text-sm text-gray-500">¿Estás seguro de que quieres eliminar este cóctel de tus favoritos?</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                                            <button onClick={handleDelete} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                                                Eliminar
+                                                            </button>
+                                                            <button onClick={closeModal} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                                                Cancelar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>
@@ -100,7 +191,7 @@ function UsersPage() {
                     <Link href={"/"} className="text-sm text-customDarkRed hover:underline dark:text-customDarkRed">Volver</Link>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

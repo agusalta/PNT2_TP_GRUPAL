@@ -1,5 +1,6 @@
 "use client";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
+
 export const UserContext = createContext();
 
 const getUserFromEmail = async (token, email) => {
@@ -134,6 +135,7 @@ export function UserProvider({ children }) {
           body: JSON.stringify({ strDrink: cocktail?.strDrink }),
         }
       );
+
       if (!response.ok) {
         throw new Error("No se pudo obtener la información del usuario.");
       }
@@ -141,6 +143,76 @@ export function UserProvider({ children }) {
       const data = await response.json();
       console.log(data);
 
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      throw error;
+    }
+  };
+
+  const handleDeleteFavouriteCocktail = async cocktail => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("No se pudo obtener el token de autenticación.");
+      }
+
+      if (!user || !user.email) {
+        throw new Error("El usuario o el email son invalidos.");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/users/${user.email}/favorites`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ strDrink: cocktail?.strDrink }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la información del usuario.");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.log("Fetch error: ", error.message);
+      throw error;
+    }
+  };
+
+  const handleGetFavouriteCocktails = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("No se pudo obtener el token de autenticación.");
+      }
+
+      if (!user || !user.email) {
+        throw new Error("El usuario o el email son invalidos.");
+      }
+
+      const response = await fetch(
+        `http://localhost:3000/users/${user.email}/favorites`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la información del usuario.");
+      }
+
+      const data = await response.json();
       return data;
     } catch (error) {
       console.log("Fetch error: ", error.message);
@@ -157,6 +229,8 @@ export function UserProvider({ children }) {
         login,
         user,
         handleFavouriteCocktail,
+        handleDeleteFavouriteCocktail,
+        handleGetFavouriteCocktails,
       }}
     >
       {children}

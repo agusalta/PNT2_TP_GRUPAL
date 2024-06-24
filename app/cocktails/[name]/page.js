@@ -8,9 +8,9 @@ import Image from 'next/image';
 export default function PageDetails({ params }) {
     const { name } = params;
     const { handleCocktailByName } = useContext(CocktailContext);
-    const { handleFavouriteCocktail } = useContext(UserContext);
-    const { login } = useContext(UserContext);
+    const { handleFavouriteCocktail, login } = useContext(UserContext);
     const [cocktail, setCocktail] = useState(null);
+    const [message, setMessage] = useState(null); 
 
     useEffect(() => {
         const fetchCocktail = async (n) => {
@@ -31,9 +31,20 @@ export default function PageDetails({ params }) {
         fetchCocktail(name);
     }, [handleCocktailByName, name]);
 
-    const handleClick = () => {
-        handleFavouriteCocktail(cocktail)
-    }
+    const handleClick = async () => {
+        try {
+            const added = await handleFavouriteCocktail(cocktail);
+
+            if (added) {
+                setMessage("Bebida añadida a favoritos correctamente");
+            } else {
+                setMessage("No se pudo añadir la bebida a favoritos");
+            }
+        } catch (error) {
+            console.error("Error al añadir bebida a favoritos:", error.message);
+            setMessage("Error al añadir la bebida a favoritos");
+        }
+    };
 
     return (
         <section className='bg-gray-100 min-h-screen flex items-center justify-center scale-125'>
@@ -87,6 +98,11 @@ export default function PageDetails({ params }) {
                         </button>}
 
                 </div>
+                {message && (
+                    <div className="mt-4 p-3 text-black  rounded-md text-center">
+                        {message}
+                    </div>
+                )}
             </div>
         </section>
     );

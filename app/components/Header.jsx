@@ -12,8 +12,8 @@ function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white p-4 text-gray-800 shadow-md">
-      <div className="flex items-center justify-around gap-5">
+    <header className="sticky top-0 z-50 bg-customWhite text-gray-800 shadow-md ">
+      <div className="flex items-center justify-around">
         <Link href="/">
           <Image
             className="rounded-full cursor-pointer"
@@ -23,9 +23,7 @@ function Header() {
             src={"/Logo.png"}
           />
         </Link>
-        <h1 className="text-5xl font-extrabold uppercase italic text-center">
-          Sour.
-        </h1>
+
         {login ? (
           <div className="flex items-center gap-4">
             <Link href={"/users"}>
