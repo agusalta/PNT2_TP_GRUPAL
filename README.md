@@ -1,3 +1,6 @@
+# Proyecto PNT2 - Cocktails
+
+Este proyecto está dedicado a la exploración y visualización de recetas de cócteles, tanto alcohólicos como no alcohólicos, utilizando la API de *TheCocktailDB*.
 
 ## Para empezar
 
@@ -13,10 +16,9 @@ pnpm dev
 bun dev
 ```
 
-Abrí el puerto [http://localhost:3000](http://localhost:3000) en tu navegador para ver los resultados.
+Abrí el puerto [http://localhost:3001](http://localhost:3001) en tu navegador para ver los resultados.
 
 ## Integrantes del grupo
 
-1. *Agustín Altamirano*
-2. *Mauro Francisco Pavesi*
-
+1. _Agustín Altamirano_
+2. _Mauro Francisco Pavesi_
