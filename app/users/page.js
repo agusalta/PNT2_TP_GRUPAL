@@ -12,6 +12,7 @@ function UsersPage() {
     const [cocktailToDelete, setCocktailToDelete] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { handleCocktailByName } = useContext(CocktailContext);
+    const [favoriteCategory, setFavoriteCategory] = useState('');
     const router = useRouter();
 
     useEffect(() => {
@@ -37,6 +38,32 @@ function UsersPage() {
         fetchData();
     }, [handleGetFavouriteCocktails, handleCocktailByName]);
 
+    useEffect(() => {
+        if (cocktails) {
+            const categoryCounts = {};
+
+            cocktails.forEach(cocktail => {
+                const category = cocktail.strCategory;
+                if (categoryCounts[category]) {
+                    categoryCounts[category]++;
+                } else {
+                    categoryCounts[category] = 1;
+                }
+            });
+
+            let mostCommonCategory = null;
+            let maxCount = 0;
+
+            Object.entries(categoryCounts).forEach(([category, count]) => {
+                if (count > maxCount) {
+                    mostCommonCategory = category;
+                    maxCount = count;
+                }
+            });
+
+            setFavoriteCategory(mostCommonCategory);
+        }
+    }, [cocktails]);
 
     useEffect(() => {
         if (!user) {
@@ -58,8 +85,6 @@ function UsersPage() {
         if (cocktailToDelete) {
             try {
                 const deleted = await handleDeleteFavouriteCocktail(cocktailToDelete);
-                console.log(deleted)
-                console.log(cocktailToDelete)
 
                 if (deleted) {
                     setCocktails(prevCocktails => prevCocktails.filter(cocktail => cocktail.idDrink !== cocktailToDelete.idDrink));
@@ -109,25 +134,27 @@ function UsersPage() {
                                 </svg>
                                 <p className="text-gray-600">
                                     {user?.username || "El usuario "}
-                                    <span>
+                                    <span >
                                         {cocktails?.length > 0
-                                            ? cocktails?.length === 1
-                                                ? "tiene una bebida favorita"
-                                                : `tiene ${cocktails?.length} bebidas favoritas`
-                                            : "no tiene bebidas favoritas"}
+                                            ? cocktails.length === 1
+                                                ? " tiene una bebida favorita"
+                                                : ` tiene ${cocktails.length} bebidas favoritas`
+                                            : " no tiene bebidas favoritas"}
                                     </span>
                                 </p>
-
                             </div>
                             <div className="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M10 3a7 7 0 100 14 7 7 0 000-14zM2 10a8 8 0 1116 0 8 8 0 01-16 0z" clipRule="evenodd" />
                                     <path d="M9 4a1 1 0 011-1h1a1 1 0 110 2H9a1 1 0 01-1-1zm0 4a1 1 0 100 2h2a1 1 0 100-2H9zm0 4a1 1 0 011-1h1a1 1 0 110 2H9a1 1 0 01-1-1z" />
                                 </svg>
-                                <span className="text-gray-600">Usuario</span>
+                                <div>
+                                    <p className="text-gray-600">Su categoria favorita es <span className="underline">{favoriteCategory || "No definida"}</span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
+
 
                     <div className="mt-6">
                         <h2 className="text-xl font-semibold mb-4">Cócteles favoritos</h2>
