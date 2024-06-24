@@ -9,7 +9,7 @@ export function CocktailProvider({ children }) {
   const handleCocktailByFirstLetter = async letter => {
     try {
       const response = await fetch(
-        `http://localhost:3000/cocktails/letter/${letter}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/cocktails/letter/${letter}`
       );
       const data = await response.json();
       setCocktailsByFirstLetter(data);
@@ -23,7 +23,7 @@ export function CocktailProvider({ children }) {
   const handleCocktailByCategory = async category => {
     try {
       const response = await fetch(
-        `http://localhost:3000/cocktails/category/search/${category}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/cocktails/category/search/${category}`
       );
 
       const data = await response.json();
@@ -37,7 +37,7 @@ export function CocktailProvider({ children }) {
   const getCategories = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/cocktails/cocktail/categories"
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/cocktails/cocktail/categories`
       );
 
       if (!response.ok) {
@@ -54,7 +54,9 @@ export function CocktailProvider({ children }) {
 
   const handleCocktailByName = async name => {
     try {
-      const response = await fetch(`http://localhost:3000/cocktails/${name}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/cocktails/${name}`
+      );
 
       const data = await response.json();
       return data;

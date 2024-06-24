@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 
 export const UserContext = createContext();
 
@@ -9,12 +9,15 @@ const getUserFromEmail = async (token, email) => {
       throw new Error("El email es un campo necesario.");
     }
 
-    const response = await fetch(`http://localhost:3000/users/find/${email}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/find/${email}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("No se pudo obtener la información del usuario.");
@@ -38,13 +41,16 @@ export function UserProvider({ children }) {
         throw new Error("Email y contraseña son obligatorios.");
       }
 
-      const response = await fetch("http://localhost:3000/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Hubo un problema al registrar al usuario.");
@@ -70,16 +76,19 @@ export function UserProvider({ children }) {
         throw new Error("Email y contraseña son obligatorios.");
       }
 
-      const response = await fetch("http://localhost:3000/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("No se pudo iniciar sesión");
@@ -87,7 +96,6 @@ export function UserProvider({ children }) {
 
       const data = await response.json();
       const authToken = data.token;
-      console.log("Token:", authToken);
 
       // Almacenar el token en localStorage
       localStorage.setItem("authToken", authToken);
@@ -97,11 +105,8 @@ export function UserProvider({ children }) {
       setUser(userData);
       setLogin(true);
 
-      console.log(userData);
-
       return { message: "Usuario logeado exitosamente." };
     } catch (error) {
-      console.log("Fetch error: ", error.message);
       throw error;
     }
   };
@@ -121,11 +126,11 @@ export function UserProvider({ children }) {
       }
 
       if (!user || !user.email) {
-        throw new Error("El usuario o el email son invalidos.");
+        throw new Error("El usuario o el email son inválidos.");
       }
 
       const response = await fetch(
-        `http://localhost:3000/users/${user.email}/favorites`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.email}/favorites`,
         {
           method: "POST",
           headers: {
@@ -159,11 +164,11 @@ export function UserProvider({ children }) {
       }
 
       if (!user || !user.email) {
-        throw new Error("El usuario o el email son invalidos.");
+        throw new Error("El usuario o el email son inválidos.");
       }
 
       const response = await fetch(
-        `http://localhost:3000/users/${user.email}/favorites`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.email}/favorites`,
         {
           method: "DELETE",
           headers: {
@@ -196,11 +201,11 @@ export function UserProvider({ children }) {
       }
 
       if (!user || !user.email) {
-        throw new Error("El usuario o el email son invalidos.");
+        throw new Error("El usuario o el email son inválidos.");
       }
 
       const response = await fetch(
-        `http://localhost:3000/users/${user.email}/favorites`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.email}/favorites`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
