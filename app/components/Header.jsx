@@ -55,11 +55,17 @@ function Header() {
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-4">
-            <Link className="uppercase font-bold" href={"/users/register"}>
+          <div className="flex items-center gap-4 uppercase">
+            <Link
+              className="text-lg font-bold hover:text-gray-600 hover:scale-90 transition ease-in-out delay-150"
+              href={"/users/register"}
+            >
               Sign Up
             </Link>
-            <Link className="uppercase font-bold" href={"/users/login"}>
+            <Link
+              className="text-lg font-bold hover:text-gray-600 hover:scale-90 transition ease-in-out delay-150"
+              href={"/users/login"}
+            >
               Sign In
             </Link>
           </div>
