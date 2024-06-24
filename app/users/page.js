@@ -132,7 +132,7 @@ function UsersPage() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M12 6a2 2 0 100-4 2 2 0 000 4zM4 6a2 2 0 100-4 2 2 0 000 4zm0 7a2 2 0 100-4 2 2 0 000 4zm12 2a2 2 0 11-4 0 2 2 0 014 0zM8 15a2 2 0 100-4 2 2 0 000 4zm8-2a2 2 0 11-4 0 2 2 0 014 0zM8 3a2 2 0 100-4 2 2 0 000 4zm12 0a2 2 0 100-4 2 2 0 000 4zm0 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                                 </svg>
-                                <p className="text-gray-600">
+                                <p className="text-gray-600 italic">
                                     {user?.username || "El usuario "}
                                     <span >
                                         {cocktails?.length > 0
@@ -149,7 +149,7 @@ function UsersPage() {
                                     <path d="M9 4a1 1 0 011-1h1a1 1 0 110 2H9a1 1 0 01-1-1zm0 4a1 1 0 100 2h2a1 1 0 100-2H9zm0 4a1 1 0 011-1h1a1 1 0 110 2H9a1 1 0 01-1-1z" />
                                 </svg>
                                 <div>
-                                    <p className="text-gray-600">Su categoria favorita es <span className="underline">{favoriteCategory || "No definida"}</span></p>
+                                    <p className="text-gray-600 italic">Su categoria favorita es <span className="lowercase">{" " + favoriteCategory || "tá por definirse"}</span></p>
                                 </div>
                             </div>
                         </div>
