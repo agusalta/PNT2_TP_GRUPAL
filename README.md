@@ -1,6 +1,6 @@
 # Proyecto PNT2 - Cocktails
 
-Este proyecto está dedicado a la exploración y visualización de recetas de cócteles, tanto alcohólicos como no alcohólicos, utilizando la API de *TheCocktailDB*.
+Este proyecto está dedicado a la exploración y visualización de recetas de cócteles, bebidas alcohólicas y no alcohólicas. Utilizamos la API de _TheCocktailDB_.
 
 ## Para empezar
 
